@@ -6,6 +6,7 @@ $script:ZiaApiSession = [ordered]@{
 
 [datetime] $script:UnixEpoch = '1970-01-01 00:00:00Z'
 
+
 function ObfuscateApiKey {
     param (
           [string]  $ApiKey
@@ -42,7 +43,8 @@ function Connect-ZscalerAPI {
 
     $script:ZiaApiSession.ApiRoot =   "https://zsapi.{0}.net" -f $CloudName
 
-    $loginTs = [Math]::Round((New-TimeSpan -Start $UnixEpoch -End (Get-Date)).TotalMilliseconds,0)
+    #$loginTs = [Math]::Round((New-TimeSpan -Start $UnixEpoch -End (Get-Date)).TotalMilliseconds,0)
+    [Int64] $loginTs = (New-TimeSpan -Start $UnixEpoch -End (Get-Date)).TotalMilliseconds
     $obfuscatedApiKey = ObfuscateApiKey -ApiKey $ApiKey -Timestamp $loginTs
 
     $body = [pscustomobject] @{
@@ -193,6 +195,8 @@ Function Get-ZscalerUrlAndFqdnXref {
     }
 }
 
+<#
+
 Export-ModuleMember -Function Connect-ZscalerAPI
 Export-ModuleMember -Function Disconnect-ZscalerAPI
 Export-ModuleMember -Function Get-ZscalerAtpDenyList
@@ -202,3 +206,5 @@ Export-ModuleMember -Function Set-ZscalerIPv4DestGroup
 Export-ModuleMember -Function Set-ZscalerChangeActivation
 Export-ModuleMember -Function Get-ZscalerFirewallFilteringRules
 Export-ModuleMember -Function Get-ZscalerUrlAndFqdnXref
+
+#>
